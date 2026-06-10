@@ -1,0 +1,66 @@
+@startuml diagrams/4c-context
+!pragma svg
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Contexto - Building Book
+
+!define DEVEX_BG_COLOR #FFFFFF
+!define SYSTEM_BG_COLOR #CCCCCC
+!define EXTERNAL_PERSON_BG_COLOR #FFAAAA
+!define EXTERNAL_SYSTEM_BG_COLOR #FFCCCC
+
+Person(user, "Desarrollador", "Usuario principal del sistema. Interactúa via CLI y navegador web.")
+Person(agent, "Agente IA", "Agente opencode que genera documentación y código.")
+
+System(buildingbook, "Building Book", "Harness SDD. CLI + servidor web para gestión de documentación de proyecto.") {
+    System_Boundary(cli, "CLI") {
+        System(bbook_build, "bbook build", "Inicializa/reconstruye estructura de documentación")
+        System(bbook_open, "bbook open", "Inicia servidor HTTP con live reload")
+        System(bbook_plan, "bbook plan", "Gestiona planes y estados de documentación")
+    }
+
+    System_Boundary(web, "Web Server") {
+        System(http_server, "HTTP Server", "Sirve documentación y diagramas")
+        System(plantuml_renderer, "PlantUML Renderer", "Genera PNG/SVG desde .puml")
+        System(live_reloader, "Live Reloader", "Detecta cambios y notifica navegador")
+    }
+
+    System_Boundary(core, "Core") {
+        System(structure_validator, "Structure Validator", "Verifica estructura contra building-book.yml")
+        System(state_manager, "State Manager", "Gestiona estados de documentación")
+        System(config_loader, "Config Loader", "Carga y parsea building-book.yml")
+    }
+}
+
+System_Ext(plantuml_jar, "PlantUML JAR", "Herramienta externa para renderizado de diagramas")
+System_Ext(filesystem, "File System", "Sistema de archivos del proyecto")
+System_Ext(opencode, "OpenCode", "Sistema de agentes IA")
+
+Rel(user, bbook_build, "Ejecuta", "CLI")
+Rel(user, bbook_open, "Ejecuta", "CLI")
+Rel(user, bbook_plan, "Ejecuta", "CLI")
+Rel(user, http_server, "Navega", "HTTP")
+
+Rel(agent, buildingbook, "Genera specs", "API")
+Rel(agent, filesystem, "Escribe archivos", "FS")
+
+Rel(bbook_build, structure_validator, "Usa")
+Rel(bbook_build, filesystem, "Crea estructura", "FS")
+Rel(bbook_open, http_server, "Inicia")
+Rel(bbook_open, plantuml_renderer, "Usa")
+Rel(bbook_open, live_reloader, "Configura")
+
+Rel(http_server, plantuml_renderer, "Delega renderizado")
+Rel(http_server, filesystem, "Lee .md y .puml")
+Rel(http_server, live_reloader, "Notifica cambios")
+
+Rel(plantuml_renderer, plantuml_jar, "Ejecuta", "java -jar")
+Rel(structure_validator, config_loader, "Usa")
+Rel(structure_validator, filesystem, "Verifica archivos")
+Rel(state_manager, filesystem, "Actualiza frontmatter")
+
+Rel(config_loader, filesystem, "Lee building-book.yml")
+
+@enduml

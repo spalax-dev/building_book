@@ -1,0 +1,23 @@
+@startuml ../../diagrams/core-comp
+!pragma svg
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Componentes - Core (Java 25)
+
+Container(core, "Core", "Java 25")
+
+Component(config, "ConfigLoader", "Java 25", "Carga building-book.yml")
+Component(structure, "DocStructure", "Java 25", "Gestiona estructura de directorios")
+Component(state, "StateManager", "Java 25", "Máquina de estados: pending/accepted/needs-work")
+Component(renderer, "PlantUmlRenderer", "Java 25", "Renderiza diagramas PlantUML")
+Component(tracker, "ProgressTracker", "Java 25", "Tracking de progreso de actividades")
+
+core --> config : load()
+core --> structure : create() / verify()
+core --> state : transition()
+core --> renderer : render()
+core --> tracker : track()
+
+@enduml

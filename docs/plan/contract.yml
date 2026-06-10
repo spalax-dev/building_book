@@ -1,0 +1,95 @@
+cli:
+  commands:
+    build:
+      name: bbook build
+      description: Inicializa o reconstruye estructura de proyecto
+      options:
+        - optionname: --force
+          optiontype: flag
+          optiondesc: Sobrescribe archivos existentes
+        - optionname: --project
+          optiontype: string
+          optiondesc: Ruta al proyecto
+      exitcodes:
+        0: Exito
+        1: Error de configuracion
+
+    open:
+      name: bbook open
+      description: Inicia servidor HTTP y abre navegador
+      options:
+        - optionname: --port
+          optiontype: integer
+          optiondesc: Puerto HTTP
+        - optionname: --host
+          optiontype: string
+          optiondesc: Host
+      exitcodes:
+        0: Exito
+        1: Puerto en uso
+
+    plan:
+      subcommands:
+        list:
+          name: bbook plan list
+          description: Lista todos los planes
+          options:
+            - optionname: --format
+              optiontype: string
+              optiondesc: Formato de salida
+        approve:
+          name: bbook plan approve id
+          description: Aprueba un plan especifico
+        show:
+          name: bbook plan activity-id
+          description: Muestra progreso de actividad
+
+http:
+  server:
+    host: localhost
+    port: 8080
+    routes:
+      - routepath: /
+        routegrMethod: GET
+        routedesc: Dashboard principal
+      - routepath: /docs/file
+        routegrMethod: GET
+        routedesc: Sirve documentacion
+      - routepath: /api/plans
+        routegrMethod: GET
+        routedesc: Lista todos los planes
+      - routepath: /api/plans/id
+        routegrMethod: GET
+        routedesc: Detalle de plan
+      - routepath: /api/plans/id/approve
+        routegrMethod: POST
+        routedesc: Aprueba plan
+      - routepath: /api/progress/activity-id
+        routegrMethod: GET
+        routedesc: Progreso de actividad
+      - routepath: /ws
+        routegrMethod: GET
+        routedesc: WebSocket para live reload
+
+websocket:
+  events:
+    - eventtype: reload
+      eventpayload:
+        payloadpath: string
+      eventdesc: Indica que archivo cambio
+    - eventtype: state-change
+      eventpayload:
+        payloaddoc: string
+        payloadstatus: string
+      eventdesc: Cambio de estado de documento
+
+plantuml:
+  outputformat: svg
+  autodownload: true
+  jarpath: "~/.buildingbook/plantuml.jar"
+
+filewatch:
+  patterns:
+    - "*.md"
+    - "*.puml"
+  debouncems: 300

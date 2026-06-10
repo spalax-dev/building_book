@@ -1,0 +1,34 @@
+@startuml ../diagrams/4c-containers
+!pragma svg
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Contenedores - Building Book
+
+Person(dev, "Desarrollador", "Usuario principal que opera via CLI")
+Person(agent, "Agente IA", "Agente opencode que genera documentación")
+
+System_Boundary(boundary, "Building Book") {
+    Container(cli, "CLI", "Picoli/GraalVM", "Punto de entrada principal. Comandos: build, open, plan. Compilado nativo con GraalVM.")
+    Container(core, "Core", "Java 25", "Logica de negocio: estados, rendering, tracking")
+    Container(web, "Web UI", "HTML/JS", "Aplicación web con live reload")
+
+    ContainerDb(filesystem, "File System", "FS", "docs/, building-book.yml")
+
+    System_Boundary(plantuml, "PlantUML") {
+        Container(plantuml_jar, "PlantUML JAR", "Java", "Renderiza diagramas a SVG/PNG")
+    }
+}
+
+Rel(cli, core, "Invoca comandos")
+Rel(core, filesystem, "Lee/escribe archivos")
+Rel(core, plantuml_jar, "Renderiza diagramas")
+Rel(web, core, "API REST")
+Rel(core, web, "WebSocket notifications")
+Rel(dev, cli, "CLI commands")
+Rel(dev, web, "Navegador")
+Rel(agent, cli, "Ejecuta CLI")
+Rel(agent, core, "Genera documentación")
+
+@enduml

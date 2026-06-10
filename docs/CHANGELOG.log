@@ -1,0 +1,39 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [0.3.0] - 2026-06-09
+
+### Added
+- ADR-004: commonmark-java for markdown→HTML rendering
+- Separate ADR files with frontmatter
+- Installation section in Plan.md
+- Files created by framework documentation
+
+### Changed
+- CLI technology: Picoli + GraalVM (no Kotlin)
+- PlantUML output format: SVG only
+- ADRs now in separate files
+
+### Removed
+- Inline ADRs from Plan.md
+- Inline changelog table (moved to CHANGELOG.log)
+
+## [0.2.0] - 2026-06-09
+
+### Added
+- SDD format restructuring
+- Picoli/GraalVM architecture decision
+
+### Changed
+- Plan format follows SDD methodology
+
+## [0.1.0] - 2026-06-09
+
+### Added
+- Initial project creation
+- Fundation.md specification
+- Use cases diagram
+- C4 context diagram

@@ -1,0 +1,23 @@
+@startuml ../../diagrams/web-comp
+!pragma svg
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Componentes - Web Server
+
+Container(web, "Web UI", "HTML/JS")
+
+Component(server, "HttpServer", "Java 25", "Servidor HTTP embebido")
+Component(watcher, "WatchService", "Java 25", "Detecta cambios en archivos")
+Component(ws_handler, "WebSocketHandler", "Java 25", "Notificaciones en tiempo real")
+Component(static, "StaticResources", "Java 25", "Sirve archivos estáticos")
+
+web --> server : HTTP
+web --> watcher : File events
+web --> ws_handler : WebSocket
+web --> static : Static files
+
+server --> ws_handler : Notify change
+
+@enduml

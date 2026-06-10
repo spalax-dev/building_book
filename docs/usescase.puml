@@ -1,0 +1,95 @@
+@startuml diagrams/usecases
+left to right direction
+
+title Casos de Uso - Building Book
+
+actor Developer as dev
+actor Agent as agent
+actor "OpenCode" as oc
+
+package CLI {
+    usecase "UC-001: Inicializar proyecto" as uc001
+    usecase "UC-002: Reconstruir estructura" as uc002
+    usecase "UC-003: Iniciar servidor web" as uc003
+    usecase "UC-004: Ver diagramas" as uc004
+    usecase "UC-005: Listar planes" as uc005
+    usecase "UC-006: Aprobar plan" as uc006
+    usecase "UC-007: Rechazar plan" as uc007
+    usecase "UC-008: Ver progreso de actividad" as uc008
+}
+
+package Verification {
+    usecase "UC-010: Verificar estructura" as uc010
+    usecase "UC-011: Verificar comandos" as uc011
+    usecase "UC-012: Verificar estados" as uc012
+}
+
+package Documentation {
+    usecase "UC-020: Escribir especificación" as uc020
+    usecase "UC-021: Crear diagrama C1" as uc021
+    usecase "UC-022: Crear diagrama C2" as uc022
+    usecase "UC-023: Crear diagrama C3" as uc023
+    usecase "UC-024: Crear diagrama de flujo" as uc024
+}
+
+dev --> uc001
+dev --> uc002
+dev --> uc003
+dev --> uc004
+dev --> uc005
+dev --> uc006
+dev --> uc007
+dev --> uc008
+
+agent --> uc020
+agent --> uc021
+agent --> uc022
+agent --> uc023
+agent --> uc024
+
+uc002<-- uc010
+uc002 <-- uc011
+uc002 <-- uc012
+
+note right of uc001
+  Comando: bbook build
+  Crea estructura inicial de docs/
+  Si existen archivos, los preserva
+  Si faltan, crea vacíos con status=pending
+end note
+
+note right of uc002
+  Comando: bbook build --force
+  Regenera archivos faltantes
+  Sobrescribe archivos con contenido default
+  Útil para recuperación
+end note
+
+note right of uc003
+  Comando: bbook open
+  Inicia servidor HTTP en puerto8080
+  Watch service detecta cambios en *.md y *.puml
+  WebSocket notifica a navegador
+end note
+
+note right of uc005
+  Comando: bbook plan
+  Muestra tabla con todos los planes:
+  - Sin revisar (pending)
+  - Aprobados (accepted)
+  - Rechazados (needs-work)
+end note
+
+note right of uc006
+  Comando: bbook plan approve <plan-id>
+  Solo si documentación previa está accepted
+  Valida que todas las actividades tienen status accepted
+end note
+
+note right of uc008
+  Comando: bbook plan <activity-id>
+  Muestra progreso de actividad específica
+  Lista tareas y su estado
+end note
+
+@enduml

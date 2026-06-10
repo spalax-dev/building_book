@@ -1,0 +1,75 @@
+models:
+  document:
+    fields:
+      - fieldname: id
+        fieldtype: string
+      - fieldname: title
+        fieldtype: string
+      - fieldname: version
+        fieldtype: string
+      - fieldname: status
+        fieldtype: string
+      - fieldname: author
+        fieldtype: string
+      - fieldname: created
+        fieldtype: string
+      - fieldname: updated
+        fieldtype: string
+
+  process:
+    fields:
+      - fieldname: id
+        fieldtype: string
+      - fieldname: name
+        fieldtype: string
+      - fieldname: description
+        fieldtype: string
+      - fieldname: stage
+        fieldtype: string
+      - fieldname: activities
+        fieldtype: array
+
+  activity:
+    fields:
+      - fieldname: id
+        fieldtype: string
+      - fieldname: name
+        fieldtype: string
+      - fieldname: processId
+        fieldtype: string
+      - fieldname: description
+        fieldtype: string
+      - fieldname: tasks
+        fieldtype: array
+
+  task:
+    fields:
+      - fieldname: id
+        fieldtype: string
+      - fieldname: activityId
+        fieldtype: string
+      - fieldname: description
+        fieldtype: string
+      - fieldname: completed
+        fieldtype: boolean
+      - fieldname: assignee
+        fieldtype: string
+
+  projectconfig:
+    fields:
+      - fieldname: projectName
+        fieldtype: string
+      - fieldname: projectIdPrefix
+        fieldtype: string
+      - fieldname: stages
+        fieldtype: array
+      - fieldname: structure
+        fieldtype: object
+      - fieldname: plantuml
+        fieldtype: object
+      - fieldname: server
+        fieldtype: object
+      - fieldname: cli
+        fieldtype: object
+      - fieldname: fileWatch
+        fieldtype: object

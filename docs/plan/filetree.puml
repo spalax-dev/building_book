@@ -1,0 +1,46 @@
+@startuml ../diagrams/filetree
+!pragma svg
+
+title Estructura del Proyecto - Building Book
+
+rectangle "building-book" <<root>> #lightblue {
+    rectangle "src" #lightcyan {
+        rectangle "main" #lightyellow {
+            rectangle "cli"
+            rectangle "core"
+            rectangle "web"
+        }
+        rectangle "test" #lightgreen
+    }
+
+    rectangle "docs" #lightyellow {
+        rectangle "diagrams"
+        rectangle "plan" #lightgray {
+            rectangle "componentes"
+            rectangle "secuencias"
+            rectangle "estados"
+            rectangle "adrs"
+        }
+        rectangle "user-stories"
+        rectangle "tareas"
+        rectangle "sprints"
+        rectangle "infraestructura"
+    }
+
+    rectangle ".opencode" #lightgray {
+        file agents.md
+        file rules.md
+    }
+
+    file "building-book.yml"
+    file "README.md"
+    file "build.gradle.kts"
+}
+
+note bottom of "building-book"
+Framework SDD AI Harness
+Compilado con GraalVM + Java 25
+Integrado con opencode
+end note
+
+@enduml

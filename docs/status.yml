@@ -1,0 +1,150 @@
+processes:
+  - id: bkb-001
+    name: CLI
+    description: Comandos build, open, plan
+    activities:
+      - id: bkb-002
+        name: Comando build
+        description: Inicializa estructura de documentacion
+        tasks:
+          - id: bkb-013
+            description: Parsear argumentos --force y --project
+          - id: bkb-014
+            description: Verificar building-book.yml existente
+          - id: bkb-015
+            description: Crear estructura de directorios docs/
+          - id: bkb-016
+            description: Generar archivos con template default
+          - id: bkb-017
+            description: Escribir frontmatter con status pending
+
+      - id: bkb-003
+        name: Comando open
+        description: Inicia servidor web y abre navegador
+        tasks:
+          - id: bkb-018
+            description: Parsear opciones --port y --host
+          - id: bkb-019
+            description: Iniciar HttpServer en puerto configurado
+          - id: bkb-020
+            description: Activar WatchService para *.md y *.puml
+          - id: bkb-021
+            description: Renderizar diagramas iniciales
+          - id: bkb-022
+            description: Abrir navegador con WebUI
+
+      - id: bkb-004
+        name: Comando plan
+        description: Muestra y gestiona estado de planes
+        tasks:
+          - id: bkb-023
+            description: Parsear subcomando list/approve/show
+          - id: bkb-024
+            description: Leer status.yml para list
+          - id: bkb-025
+            description: Verificar precondiciones para approve
+          - id: bkb-026
+            description: Actualizar estado en status.yml
+
+  - id: bkb-005
+    name: Web Server
+    description: HTTP server con live reload
+    activities:
+      - id: bkb-006
+        name: HTTP Server
+        description: Servidor HTTP embebido
+        tasks:
+          - id: bkb-027
+            description: Configurar rutas REST /api/*
+          - id: bkb-028
+            description: Servir archivos estaticos docs/
+          - id: bkb-029
+            description: Renderizar markdown con commonmark-java
+          - id: bkb-030
+            description: Renderizar templates con Pebble
+          - id: bkb-031
+            description: Manejar errores 404 y 500
+
+      - id: bkb-007
+        name: File Watcher
+        description: Detecta cambios en archivos
+        tasks:
+          - id: bkb-032
+            description: Configurar watcher para *.md y *.puml
+          - id: bkb-033
+            description: Implementar debounce de 300ms
+          - id: bkb-034
+            description: Detectar cambios y notificar
+          - id: bkb-035
+            description: Re-renderizar diagrama cambiado
+
+      - id: bkb-008
+        name: WebSocket Handler
+        description: Notificaciones en tiempo real
+        tasks:
+          - id: bkb-036
+            description: Configurar endpoint /ws
+          - id: bkb-037
+            description: Mantener conexiones activas
+          - id: bkb-038
+            description: Enviar evento reload en cambio
+          - id: bkb-039
+            description: Enviar evento state-change en update
+
+  - id: bkb-009
+    name: Core
+    description: Logica de negocio
+    activities:
+      - id: bkb-010
+        name: Config Loader
+        description: Carga y valida building-book.yml
+        tasks:
+          - id: bkb-040
+            description: Parsear YAML con SnakeYAML
+          - id: bkb-041
+            description: Validar estructura requerida
+          - id: bkb-042
+            description: Cargar idPrefix del proyecto
+          - id: bkb-043
+            description: Proveer configuracion via Singleton
+          - id: bkb-044
+            description: Validar rutas de estructura
+
+      - id: bkb-011
+        name: State Manager
+        description: Maquina de estados de documentos
+        tasks:
+          - id: bkb-045
+            description: Implementar transiciones pending->accepted->needs-work
+          - id: bkb-046
+            description: Leer frontmatter de documento
+          - id: bkb-047
+            description: Escribir frontmatter actualizado
+          - id: bkb-048
+            description: Validar transicion segun reglas
+          - id: bkb-049
+            description: Notificar cambios al sistema
+
+      - id: bkb-012
+        name: PlantUML Renderer
+        description: Renderiza diagramas PlantUML
+        tasks:
+          - id: bkb-050
+            description: Descargar PlantUML JAR si no existe
+          - id: bkb-051
+            description: Ejecutar plantuml -tsvg con timeout
+          - id: bkb-052
+            description: Guardar SVG en carpeta diagrams/
+          - id: bkb-053
+            description: Manejar errores de rendering
+          - id: bkb-054
+            description: Cachear JAR descargado
+
+progress:
+  totalProcesses: 3
+  completedProcesses: 0
+  totalActivities: 9
+  completedActivities: 0
+  totalTasks: 38
+  completedTasks: 0
+  percentage: 0

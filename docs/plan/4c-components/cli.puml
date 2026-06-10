@@ -1,0 +1,19 @@
+@startuml ../../diagrams/cli-comp
+!pragma svg
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Componentes - CLI (Picoli/GraalVM)
+
+Container(cli, "CLI", "Picoli/GraalVM")
+
+Component(build, "BuildCommand", "Picoli", "Inicializa estructura de proyecto")
+Component(open, "OpenCommand", "Picoli", "Inicia servidor web")
+Component(plan, "PlanCommand", "Picoli", "Gestión de planes y estados")
+
+cli --> build : bbook build
+cli --> open : bbook open
+cli --> plan : bbook plan
+
+@enduml
